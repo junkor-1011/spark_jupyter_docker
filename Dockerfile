@@ -1,6 +1,5 @@
 #FROM jupyter/all-spark-notebook:latest
 FROM jupyter/all-spark-notebook:63d0df23b673
-#FROM jupyter/all-spark-notebook:dc9744740e12
 # change UID & GID
 
 #USER root
@@ -46,6 +45,8 @@ USER $NB_UID
 RUN conda update -y conda && \
     conda install -c conda-forge --yes \
 #        'dask==2.10.0'\
+        'psycopg2'\
+        'sqlalchemy'\
         'nodejs'\
         'ipympl'\
         'ipywidgets'\
@@ -58,7 +59,9 @@ RUN conda update -y conda && \
         'snappy'\
         'fastparquet'\
         'geopy'\
+        'geojson'\
         'geopandas'\
+        'geoalchemy2'\
         'shapely'\
         'osmnx'\
         'folium'\
@@ -116,18 +119,11 @@ RUN conda update -y conda && \
 #RUN pip install graphframes
 
 USER jovyan
-#RUN echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64" >> ~/.bashrc
-#RUN echo "export SPARK_HOME=/usr/local/spark" >> ~/.bashrc
-#RUN echo "export PATH=\$PATH:$SPARK_HOME/bin" >> ~/.bashrc
-#RUN echo "export PYSPARK_PYTHON=/opt/conda/bin/python" >> ~/.bashrc
-#RUN echo "export PYSPARK_DRIVER_PYTHON=jupyter" >> ~/.bashrc
-#RUN echo "export PYSPARK_DRIVER_PYTHON_OPTS='notebook' pyspark" >> ~/.bashrc
 
 #RUN source ~/.bashrc
-#RUN /usr/local/spark/bin/spark-shell --packages graphframes:graphframes:0.7.0-spark2.4-s_2.11
-RUN /usr/local/spark/bin/pyspark --packages graphframes:graphframes:0.7.0-spark2.4-s_2.11
+RUN /usr/local/spark/bin/pyspark --packages graphframes:graphframes:0.7.0-spark2.4-s_2.11 \
+    /usr/local/spark/bin/pyspark --packages org.postgresql:postgresql:jar:42.1.4
 
-#RUN pip install --user mca py_d3 somoclu smopy
 RUN pip install --user \
 #                 hyperopt \
 #                 optuna \
@@ -171,5 +167,4 @@ ENV JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64" \
     PATH="$PATH:$SPARK_HOME/bin" \
     PYSPARK_PYTHON="/opt/conda/bin/python" \
     ARROW_PRE_0_15_IPC_FORMAT=1
-#    PYTHONPATH="$(ls -a ${SPARK_HOME}/python/lib/py4j-*-src.zip):${SPARK_HOME}/python:$PYTHONPATH"
 
