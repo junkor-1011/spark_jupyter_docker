@@ -121,7 +121,7 @@ RUN conda update -y conda && \
 USER jovyan
 
 #RUN source ~/.bashrc
-RUN /usr/local/spark/bin/pyspark --packages graphframes:graphframes:0.7.0-spark2.4-s_2.11 \
+RUN /usr/local/spark/bin/pyspark --packages graphframes:graphframes:0.7.0-spark2.4-s_2.11 && \
     /usr/local/spark/bin/pyspark --packages org.postgresql:postgresql:jar:42.1.4
 
 RUN pip install --user \
